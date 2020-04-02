@@ -1,0 +1,13 @@
+{
+  "name": "CLI",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "eugenekim000 <eugenekim000@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "commander": "^5.0.0",
+    "inquirer": "^7.1.0",
+    "minimist": "^1.2.5"
+  }
+}
