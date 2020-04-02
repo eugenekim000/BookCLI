@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs');
 
 const getData = async query => {
   try {
@@ -19,8 +20,33 @@ const getData = async query => {
   }
 };
 
+const updateReadingList = dir => {
+  const saveDirectory = dir ? dir : '';
+
+  fs.appendFile(`${saveDirectory}readingList.txt`, '\ntest', function(err) {
+    if (err) throw err;
+    console.log('File is created successfully.');
+  });
+};
+
+const openReadingList = dir => {
+  const saveDirectory = dir ? dir : '';
+
+  const readingList = fs.readFileSync(
+    `${saveDirectory}readingList.txt`,
+    'utf8',
+    function(err) {
+      if (err) throw err;
+    }
+  );
+  console.log(readingList);
+};
+
+openReadingList();
 //console.log(getData('harrypotter'));
 
 module.exports = {
-  getData
+  getData,
+  updateReadingList,
+  openReadingList
 };
