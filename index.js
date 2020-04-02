@@ -3,6 +3,8 @@ const fs = require('fs');
 
 const getData = async query => {
   try {
+    let responseArray = [];
+
     if (Array.isArray(query)) {
       query = query.join('+');
     }
@@ -10,20 +12,28 @@ const getData = async query => {
       `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=5`
     );
     const data = response.data;
+
     for (let i = 0; i < data.items.length; i++) {
-      console.log(data.items[i].volumeInfo.authors);
+      /*  console.log(data.items[i].volumeInfo.authors);
       console.log(data.items[i].volumeInfo.title);
-      console.log(data.items[i].volumeInfo.publisher);
+      console.log(data.items[i].volumeInfo.publisher); */
+
+      responseArray.push({
+        authors: data.items[i].volumeInfo.authors,
+        title: data.items[i].volumeInfo.title,
+        publisher: data.items[i].volumeInfo.authors
+      });
     }
+    return responseArray;
   } catch (error) {
     console.log(error);
   }
 };
 
-const updateReadingList = dir => {
+const updateReadingList = (book, dir) => {
   const saveDirectory = dir ? dir : '';
 
-  fs.appendFile(`${saveDirectory}readingList.txt`, '\ntest', function(err) {
+  fs.appendFile(`${saveDirectory}readingList.txt`, `\n${book}`, function(err) {
     if (err) throw err;
     console.log('File is created successfully.');
   });
@@ -41,9 +51,6 @@ const openReadingList = dir => {
   );
   console.log(readingList);
 };
-
-openReadingList();
-//console.log(getData('harrypotter'));
 
 module.exports = {
   getData,
