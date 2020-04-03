@@ -1,5 +1,5 @@
 const program = require('commander');
-const { getData, updateReadingList, openReadingList } = require('./index.js');
+const { getData, openReadingList } = require('./index.js');
 const queryOptions = require('./inquirer.js');
 
 program.version('1.0.0').description('Book tracker CLI');
@@ -14,14 +14,6 @@ program
   });
 
 program
-  .command('add <book> [dir]')
-  .alias('a')
-  .description('Add to your reading list')
-  .action((book, dir) => {
-    updateReadingList(queriedBooks[book], dir);
-  });
-
-program
   .command('open [dir]')
   .alias('o')
   .description('Open your reading list')
@@ -30,5 +22,3 @@ program
   });
 
 program.parse(process.argv);
-
-let queriedBooks = 'huh';

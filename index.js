@@ -11,19 +11,15 @@ const getData = async query => {
     const response = await axios.get(
       `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=5`
     );
-    const data = response.data;
 
-    for (let i = 0; i < data.items.length; i++) {
-      /*  console.log(data.items[i].volumeInfo.authors);
-      console.log(data.items[i].volumeInfo.title);
-      console.log(data.items[i].volumeInfo.publisher); */
-
+    response.data.items.map(data => {
       responseArray.push({
-        authors: data.items[i].volumeInfo.authors,
-        title: data.items[i].volumeInfo.title,
-        publisher: data.items[i].volumeInfo.authors
+        authors: data.volumeInfo.authors,
+        title: data.volumeInfo.title,
+        publisher: data.volumeInfo.authors
       });
-    }
+    });
+
     return responseArray;
   } catch (error) {
     console.log(error);
