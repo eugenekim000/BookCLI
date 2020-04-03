@@ -14,6 +14,7 @@ program
     if (queriedBooks === undefined) {
       console.log(colors.red('No Books Found. Please query again.'));
     } else {
+      queriedBooks.push('Cancel');
       queryOptions(queriedBooks);
     }
   })

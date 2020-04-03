@@ -12,6 +12,7 @@ module.exports = function (query) {
         choices: query.map((item) => {
           //another possible option is to push title, author, and publisher
           //into an array, stringify it, and filter out {} and [].
+          if (item === 'Cancel') return 'Cancel';
 
           const finalString = [];
           item.title
@@ -26,15 +27,17 @@ module.exports = function (query) {
       },
     ])
     .then(function (answers) {
-      updateReadingList(answers.save);
-      console.log(colors.green('query saved!'));
+      if (answers.save === 'Cancel') {
+        console.log(colors.red('Query canceled.'));
+      } else {
+        updateReadingList(answers.save);
+        console.log(colors.green('Query saved!'));
+      }
     });
 };
 
 function resultChecker(stringArray, result, type) {
   stringArray.push(type.toUpperCase() + ':');
-  console.log(result);
-  console.log(result[type], 'result type!!');
   result[type]
     ? result[type].map((item) => stringArray.push(item))
     : stringArray.push(`No ${type} found.`);
