@@ -2,6 +2,8 @@
 
 Command line interface for query books from Google's Book API, then saving the query to a list.
 Built with Commander.js and Inquirer.js. 
+
+
 ![](demo.gif)
 
 ## Getting Started
