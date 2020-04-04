@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const colors = require('colors');
 const { updateReadingList } = require('./index.js');
 
-module.exports = function (query) {
+module.exports = function (query, saveDir) {
   inquirer
     .prompt([
       {
@@ -26,11 +26,12 @@ module.exports = function (query) {
         }),
       },
     ])
+
     .then(function (answers) {
       if (answers.save === 'Cancel') {
         console.log(colors.red('Query canceled.'));
       } else {
-        updateReadingList(answers.save);
+        updateReadingList(answers.save, saveDir);
         console.log(colors.green('Query saved!'));
       }
     });
