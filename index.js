@@ -9,16 +9,15 @@ const getData = async (query) => {
 		if (Array.isArray(query)) {
 			query = query.join('+');
 		}
-		/* 		const response = await axios.get(
-			`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=5`
-		); */
 
 		const response = await axios({
 			method: 'get',
 			url: `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=5`,
 			timeout: 1000 * 15, //timeout after 15 seconds
 		}).catch(function (error) {
-			console.log('Error, timeout exceeded.');
+			if (error.timeout) {
+				console.log('Error, timeout exceeded.');
+			}
 		});
 
 		if (response.totalItems === 0) {
