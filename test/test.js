@@ -1,55 +1,47 @@
 const expect = require('chai').expect;
 const axios = require('axios');
 const fs = require('fs');
-const { deleteLastLine } = require('./helperFunctions');
+const assert = require('assert');
+const sinon = require('sinon');
+const { getData, openReadingList, updateReadingList } = require('../index.js');
 
-describe('The Book CLI', () => {
-  it('should print the correct output', async () => {
-    const response = await execute('./commander.js', ['q', 'harry potter']);
+const { fileLength, deleteLastLine } = require('./helperFunctions');
 
-    const responseAPI = await axios.get(
-      'https://www.googleapis.com/books/v1/volumes?q=harry+potter&maxResults=5'
-    );
+describe('Query book', () => {
+	it('it should Query 5 books', async () => {
+		validQuery = await getData('harry potter');
+		assert.equal(validQuery.length, 5);
+	});
 
-    const responseArray = [];
-    responseAPI.data.items.map((data) => {
-      responseArray.push({
-        authors: data.volumeInfo.authors,
-        title: data.volumeInfo.title,
-        publisher: data.volumeInfo.authors,
-      });
-    });
+	it('should return errors with bad queries', async () => {
+		let spy = sinon.spy(console, 'log');
+		let emptyQuery = await getData('');
 
-    responseArrayString = responseArray.join('\n');
+		assert.equal(emptyQuery, undefined);
+		assert(spy.calledWith('Error in query.'));
+		spy.restore();
+	});
+});
 
-    expect(response.to.have.all.keys(responseArrayString));
-  });
+describe('Saving queries', async () => {
+	it('it should read the current saved list', async () => {
+		let spy = sinon.spy(console, 'log');
 
-  it('should add to the list', async () => {
-    const totalLinesReadingList = await fs.readFileSync(
-      '../readingList.txt',
-      'utf8'
-    ).length;
+		await fileLength();
+		assert(spy.calledWith(5));
 
-    const response = await cmd.execute('./commander.js', ['q', 'harry potter']);
-    //TODO
-    //need to add inquirer user input
+		spy.restore();
+	});
 
-    const totalNewLinesReadingList = await fs.readFileSync(
-      '../testReadingList.txt',
-      'utf8'
-    ).length;
-    expect(totalNewLinesReadingList.to.equal(totalLinesReadingList + 1));
-  });
+	it('it should add to the saved list', async () => {
+		let spy = sinon.spy(console, 'log');
 
-  it('should print if no result is found', async () => {
-    const response = await cmd.execute('./commander.js', [
-      'q',
-      'jdhfkhjksdahjkhf',
-    ]);
-    expect(
-      response.to.equal('undefined\n No Books Found. Please query again.')
-    );
-    deleteLastLine();
-  });
+		await updateReadingList('harry potter', './test/');
+		await fileLength();
+		assert(spy.calledWith(6));
+
+		spy.restore();
+
+		await deleteLastLine();
+	});
 });
