@@ -1,9 +1,6 @@
-const expect = require('chai').expect;
-const axios = require('axios');
-const fs = require('fs');
 const assert = require('assert');
 const sinon = require('sinon');
-const { getData, openReadingList, updateReadingList } = require('../index.js');
+const { getData, updateReadingList } = require('../index.js');
 
 const { fileLength, deleteLastLine } = require('./helperFunctions');
 

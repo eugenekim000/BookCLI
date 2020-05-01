@@ -1,5 +1,4 @@
 const fs = require('fs');
-const util = require('util');
 
 function deleteLastLine() {
 	fs.readFile('./test/readingList.txt', 'utf8', function (err, data) {
